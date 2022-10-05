@@ -35,7 +35,8 @@ namespace Assignment3_wbwright.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movie.ToListAsync());
+            var applicationDbContext = _context.Movie.Include(m => m.Actor);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Movies/Details/5
@@ -47,6 +48,7 @@ namespace Assignment3_wbwright.Controllers
             }
 
             var movie = await _context.Movie
+                .Include(m => m.Actor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -76,6 +78,7 @@ namespace Assignment3_wbwright.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name");
             return View();
         }
 
@@ -84,7 +87,7 @@ namespace Assignment3_wbwright.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ImdbHyperLink,Genre,ReleaseYear")] Movie movie, IFormFile Poster)
+        public async Task<IActionResult> Create([Bind("Id,Title,ImdbHyperLink,Genre,ReleaseYear,ActorId")] Movie movie, IFormFile Poster)
         {
             if (ModelState.IsValid)
             {
@@ -98,6 +101,7 @@ namespace Assignment3_wbwright.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", movie.ActorId);
             return View(movie);
         }
 
@@ -114,6 +118,7 @@ namespace Assignment3_wbwright.Controllers
             {
                 return NotFound();
             }
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", movie.ActorId);
             return View(movie);
         }
 
@@ -122,7 +127,7 @@ namespace Assignment3_wbwright.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ImdbHyperLink,Genre,ReleaseYear,Poster")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ImdbHyperLink,Genre,ReleaseYear,Poster,ActorId")] Movie movie)
         {
             if (id != movie.Id)
             {
@@ -149,6 +154,7 @@ namespace Assignment3_wbwright.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", movie.ActorId);
             return View(movie);
         }
 
@@ -161,6 +167,7 @@ namespace Assignment3_wbwright.Controllers
             }
 
             var movie = await _context.Movie
+                .Include(m => m.Actor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {

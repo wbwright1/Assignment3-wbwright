@@ -4,6 +4,7 @@ using Assignment3_wbwright.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment3_wbwright.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221005024918_addedActorPerformedAndFixedActorsMovies")]
+    partial class addedActorPerformedAndFixedActorsMovies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,29 +58,6 @@ namespace Assignment3_wbwright.Data.Migrations
                     b.HasIndex("MovieId");
 
                     b.ToTable("Actor");
-                });
-
-            modelBuilder.Entity("Assignment3_wbwright.Models.ActorPerformedInMovie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ActorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MovieId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActorId");
-
-                    b.HasIndex("MovieId");
-
-                    b.ToTable("ActorPerformedInMovie");
                 });
 
             modelBuilder.Entity("Assignment3_wbwright.Models.Movie", b =>
@@ -324,21 +303,6 @@ namespace Assignment3_wbwright.Data.Migrations
                     b.HasOne("Assignment3_wbwright.Models.Actor", "Movie")
                         .WithMany()
                         .HasForeignKey("MovieId");
-
-                    b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("Assignment3_wbwright.Models.ActorPerformedInMovie", b =>
-                {
-                    b.HasOne("Assignment3_wbwright.Models.Actor", "Actor")
-                        .WithMany()
-                        .HasForeignKey("ActorId");
-
-                    b.HasOne("Assignment3_wbwright.Models.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieId");
-
-                    b.Navigation("Actor");
 
                     b.Navigation("Movie");
                 });

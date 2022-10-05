@@ -12,5 +12,6 @@ namespace Assignment3_wbwright.Data
         }
         public DbSet<Assignment3_wbwright.Models.Actor> Actor { get; set; }
         public DbSet<Assignment3_wbwright.Models.Movie> Movie { get; set; }
+        public DbSet<Assignment3_wbwright.Models.ActorPerformedInMovie> ActorPerformedInMovie { get; set; }
     }
 }
