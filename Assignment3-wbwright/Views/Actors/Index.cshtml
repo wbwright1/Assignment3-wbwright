@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.Age)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImdbHyperLink)
+                <a href="@(item.ImdbHyperLink)">@item.Name</a>
             </td>
             <td>
                 @if (item.Photo != null)
