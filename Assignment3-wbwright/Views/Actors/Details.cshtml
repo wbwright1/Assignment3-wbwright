@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+<script src="/js/makeDT.js" defer> </script>
 <h1>Details</h1>
 
 <div>
@@ -50,7 +50,8 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<div>
+<div class="fw-bold"> 
+    <p></p>
     Average Tweet Sentiment:
     @if (Model.AverageTweetSentiment() != 0)
     {
@@ -70,7 +71,7 @@
         <span>Neutral</span>
     }
 </div>
-<table class="table">
+<table class="table" id="dtTable">
     <thead>
         <tr>
             <th>
