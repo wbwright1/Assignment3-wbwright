@@ -126,17 +126,31 @@ namespace Assignment3_wbwright.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Gender,Age,ImdbHyperLink,Photo,MovieId")] Actor actor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Gender,Age,ImdbHyperLink,MovieId")] Actor actor, IFormFile? Photo)
         {
             if (id != actor.Id)
             {
                 return NotFound();
             }
 
+            var existingActor = await _context.Actor.AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (Photo != null && Photo.Length > 0)
+                    {
+                        var memoryStream = new MemoryStream();
+                        await Photo.CopyToAsync(memoryStream);
+                        actor.Photo = memoryStream.ToArray();
+                    }
+                    else
+                    {
+                        actor.Photo = existingActor.Photo;
+                    }
+
                     _context.Update(actor);
                     await _context.SaveChangesAsync();
                 }
